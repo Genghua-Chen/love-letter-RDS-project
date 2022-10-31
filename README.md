@@ -1,4 +1,4 @@
-# Demo project for database course
+# Love Letter Hosting in AWS EC2
 
 ## Setup Instructions:
 
