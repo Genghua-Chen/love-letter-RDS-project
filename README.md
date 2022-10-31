@@ -1,4 +1,4 @@
-# Love Letter Hosting in AWS EC2
+# Love Letter Hosting in AWS RelationalDB
 
 ## Setup Instructions:
 
