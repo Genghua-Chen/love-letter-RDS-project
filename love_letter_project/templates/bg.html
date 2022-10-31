@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+* { margin:0; padding:0; }
+body { width:100%; height:100%; overflow:hidden; }
+</style>
+
+<!-- <script type="text/javascript" src="js/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>	
+<style>
+#container {
+  position: relative;
+}
+#container canvas, #overlay {
+  position: absolute;
+}
+canvas {
+/*  border: 1px solid black;*/
+}
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+.my_text
+{
+    font-family:    "Times New Roman", Times, serif;
+    font-size:      25px;
+    font-weight:    bold;
+    margin:-100 auto;
+    width:500px;
+    /*height:0px;border:1px solid #F00*/
+}
+</style>
+</head>
+
+<body>
+<!-- {% block content %}	{% endblock %}	 -->
+<!-- <p id = 'a'>saald</p> -->
+<div id="container", class="center-screen">
+
+<canvas id="c" width="300" height="150"></canvas>   
+
+<div id="overlay", class = 'my_text'>
+	<!-- <p>Name:</p> <br>	 -->
+	<p></p> <br>
+
+	<p style="font-style: italic; color:red;">Dear {{ account['sname'] }},</p> <br>
+
+<!-- 	<p style="font-style: italic;">Just for one reason, I love you so much. Nothing is impossible to a willing mind, love included.</p>
+
+	<p style="font-style: italic;">Therefore, day after day, I wonder why, I wonder how, I wonder where you are.</p>
+
+	<p style="font-style: italic;">Time to go, I want to tell you how much I feel, and how much I love you.</p>
+
+	<p style="font-style: italic;">When I think of you, the miles between us disappear. Seeing you will cause me an indescribable thrill, even at the sight of your handwriting will make me tremble.</p>
+
+	<p style="font-style: italic;">And the wonderful times we shared together shall always remain in my heart. You are my little angel.</p>
+
+	<p style="font-style: italic;">Accordingly, I would say, &ldquo;I love you&rdquo; for millions and billions of times, and times and times again. Everything comes and goes, but love stays.</p>
+
+	<p style="font-style: italic;">When you need someone, remember that I&#39;d be there. If I were in heaven, I&#39;d write your name on every star for all to see just how much you mean to me.</p>
+
+	<p style="font-style: italic;">No matter how long the road may be in the future, please cherish every moment we shared together. No matter how many years will pass away, please treasure our love till the last day.</p>
+
+	<p style="font-style: italic;">Love is the triumph of imagination over intelligence.&nbsp;</p> -->
+	<p style="font-style: italic; color: #8CC7B5">Just for one reason, I love you so much. Nothing is impossible to a willing mind, love included. Therefore, day after day, I wonder why, I wonder how, I wonder where you are. Time to go, I want to tell you how much I feel, and how much I love you. When I think of you, the miles between us disappear. Seeing you will cause me an indescribable thrill, even at the sight of your handwriting will make me tremble. And the wonderful times we shared together shall always remain in my heart. You are my little angel. Accordingly, I would say, &ldquo;I love you&rdquo; for millions and billions of times, and times and times again. Everything comes and goes, but love stays. When you need someone, remember that I&#39;d be there. If I were in heaven, I&#39;d write your name on every star for all to see just how much you mean to me. No matter how long the road may be in the future, please cherish every moment we shared together. No matter how many years will pass away, please treasure our love till the last day. Love is the triumph of imagination over intelligence.&nbsp;</p> <br>
+
+	<p style="font-style: italic; color:red;">{{ account['fname'] }}</p>
+
+
+</div>
+<!-- <script type="text/javascript" src="js/jquery.min.js"></script> -->
+</div>
+
+<script type="text/javascript">		
+$(document).ready(function() {	
+	// $("#a").text("b")
+	var canvas = document.getElementById("c");
+	var ctx = canvas.getContext("2d");
+	var c = $("#c");
+	var w,h;
+	var pi = Math.PI;
+	var all_attribute = {
+		num:100,            		
+		start_probability:0.1,		 	     
+		radius_min:1,   			  
+		radius_max:2,   			
+		radius_add_min:.3,          
+		radius_add_max:.5,          
+		opacity_min:0.3,           
+		opacity_max:0.5, 				
+		opacity_prev_min:.003,            
+		opacity_prev_max:.005,           
+		light_min:40,              
+		light_max:70,             
+	};
+	var style_color = find_random(0,360);  
+	var all_element =[];
+	window_resize();
+	function start(){
+		window.requestAnimationFrame(start);
+		style_color+=.1;
+		ctx.fillStyle = 'hsl('+style_color+',100%,97%)';
+		ctx.fillRect(0, 0, w, h);
+		if (all_element.length < all_attribute.num && Math.random() < all_attribute.start_probability){
+			all_element.push(new ready_run);
+		}
+		all_element.map(function(line) {
+			line.to_step();
+		})
+	}
+	function ready_run(){
+		this.to_reset();
+	}
+	ready_run.prototype = {
+		to_reset:function(){
+			var t = this;
+			t.x = find_random(0,w);
+			t.y = find_random(0,h);
+			t.radius = find_random(all_attribute.radius_min,all_attribute.radius_max);
+			t.radius_change = find_random(all_attribute.radius_add_min,all_attribute.radius_add_max);
+			t.opacity = find_random(all_attribute.opacity_min,all_attribute.opacity_max);
+			t.opacity_change = find_random(all_attribute.opacity_prev_min,all_attribute.opacity_prev_max);
+			t.light = find_random(all_attribute.light_min,all_attribute.light_max);
+			t.color = 'hsl('+style_color+',100%,'+t.light+'%)';
+		},
+		to_step:function(){
+			var t = this;
+			t.opacity -= t.opacity_change;
+			t.radius += t.radius_change;
+			if(t.opacity <= 0){
+				t.to_reset();
+				return false;
+			}
+			ctx.fillStyle = t.color;
+			ctx.globalAlpha = t.opacity;
+			ctx.beginPath();
+			ctx.arc(t.x,t.y,t.radius,0,2*pi,true);
+			ctx.closePath();
+			ctx.fill();
+			// a = 'dasdafdsgdfsggjsjdsjf sdjfljadsfja jasjd ljwlkqfhg wegwe jrkleqwfkgl;askf;aksdlkas;dkas;dkgj lsdjl jsdgljsdlfj;lsdfjsdlfjsdlfjdslfjsdlkj dsjdfffffffffffffffffff'
+			// ctx.globalAlpha = 1;
+			// ctx.font = "30px Comic Sans MS";	
+			// ctx.fillStyle = "red";
+			// ctx.textAlign = "center";
+			// ctx.fillText(a, canvas.width/2, canvas.height/2);
+
+		}
+	}
+	function window_resize(){
+		w = window.innerWidth;
+		h = window.innerHeight;
+		canvas.width = w;
+		canvas.height = h;
+	}
+	$(window).resize(function(){
+		window_resize();
+	});
+	function find_random(num_one,num_two){
+		return Math.random()*(num_two-num_one)+num_one;
+	}
+	(function() {
+		var lastTime = 0;
+		var vendors = ['webkit', 'moz'];
+		for(var xx = 0; xx < vendors.length && !window.requestAnimationFrame; ++xx) {
+			window.requestAnimationFrame = window[vendors[xx] + 'RequestAnimationFrame'];
+			window.cancelAnimationFrame = window[vendors[xx] + 'CancelAnimationFrame'] ||
+										  window[vendors[xx] + 'CancelRequestAnimationFrame'];
+		}
+	
+		if (!window.requestAnimationFrame) {
+			window.requestAnimationFrame = function(callback, element) {
+				var currTime = new Date().getTime();
+				var timeToCall = Math.max(0, 16.7 - (currTime - lastTime));
+				var id = window.setTimeout(function() {
+					callback(currTime + timeToCall);
+				}, timeToCall);
+				lastTime = currTime + timeToCall;
+				return id;
+			};
+		}
+		if (!window.cancelAnimationFrame) {
+			window.cancelAnimationFrame = function(id) {
+				clearTimeout(id);
+			};
+		}
+	}());
+	start();
+
+});
+</script>
+
+
+
+ 

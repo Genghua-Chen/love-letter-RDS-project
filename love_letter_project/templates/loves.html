@@ -1,0 +1,44 @@
+{% extends 'layout.html' %} 
+{% block title %} Love {% endblock %} 
+{% block content %}
+
+
+  <html>
+  <body>
+
+
+      <center>
+          <form onsubmit="return myFunction()", method = 'POST'>
+            Your Name: <input type="text" id="fname" size="20" name="fname"><br>
+            Lover's Name: <input type="text" id="sname" size="20" name="sname"><br>
+
+            <input type="submit" value="Submit"> 
+          </form>
+      </center>
+
+      <script>
+      function myFunction() {
+        var sname = document.getElementById("sname").value;
+        var fname = document.getElementById("fname").value;
+        submitOK = "true";
+
+        if (fname.length > 10) {
+          alert("The name may have no more than 10 characters");
+          submitOK = "false";
+        } 
+
+        if (sname.length > 10) {
+          alert("The name may have no more than 10 characters");
+          submitOK = "false";
+        } 
+
+        if (submitOK == "false") {
+          return false;
+        }
+      }
+      </script>
+
+  </body>
+  </html>
+
+{% endblock %}
